@@ -1,0 +1,31 @@
+{% load compress %}
+{% load static %}
+
+ 
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% comment %} <link href="{% static "style/style.css" %}" rel="stylesheet"> {% endcomment %}
+
+{% compress css %}
+  <link href="{% static "src/output.css" %}" rel="stylesheet">
+{% endcompress %}
+
+  <title>Morpion</title>
+</head>
+
+<body class="bg-[#E9EBED]">
+
+  
+
+    {% block content %}
+
+    {% endblock content %}
+ 
+</body>
+
+</html>
