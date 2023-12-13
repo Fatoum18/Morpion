@@ -1,0 +1,35 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block title %}
+  <title>HELBMorpion</title>
+{% endblock %}
+
+{% block content %}
+  <div class="w-full flex flex-col h-screen">
+    <nav class="flex items-center justify-between flex-wrap bg-[#1F485B] p-6">
+      <div class="flex items-center flex-shrink-0 text-white mr-6">
+        <img alt="Morpion" class="h-6 w-6" src="{% static "morpion.svg" %}"/>
+      
+        <span class="font-semibold text-xl tracking-tight">HELBMorpion</span>
+      </div>
+     
+      <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+        <div class="nav-item text-sm lg:flex-grow">
+          <a href="{% url 'partie' %}" class="{% if ACTIVE_VIEW == VIEW_PARTIE %} active {% endif %}">Parties</a>
+          <a href="{% url 'invitations' %}" class="{% if ACTIVE_VIEW == VIEW_INVITATION %} active {% endif %}">Invitations</a>
+          <a href="{% url 'notifications' %}" class="{% if ACTIVE_VIEW == VIEW_NOTIFICATION %} active {% endif %}" >Notifications</a>
+          <a href="{% url 'statistiques' %}" class="{% if ACTIVE_VIEW == VIEW_STATISTIQUE %} active {% endif %}">Statistique</a>
+        </div>
+        <div class="flex space-x-4">
+          <a href="{% url 'profil' %}" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-[#1F485B] hover:bg-white mt-4 lg:mt-0  {% if ACTIVE_VIEW == VIEW_PROFIL %} !bg-white !text-[#1F485B] {% endif %}">Mon profile</a>
+          <a href="#" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-[#1F485B] hover:bg-white mt-4 lg:mt-0">Se deconnecter</a>
+        </div>
+ 
+      </div>
+    </nav>
+    <div class="flex-1  w-full h-full">
+        {% block pageContainer %}
+        {% endblock pageContainer %}
+    </div>
+  </div>
+{% endblock %}

@@ -2,3 +2,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+body{
+    @apply min-h-screen h-full w-full bg-[#E9EBED];
+    
+}
+
+button,[type='button']{
+    @apply bg-[#1F485B] min-w-[100px]  hover:bg-[#206E93] text-white font-bold py-2 px-4 rounded focus:outline-none;
+}
+
+.form-group{
+    @apply mb-4;
+}
+
+.form-group label {
+    @apply block text-gray-700 text-sm font-bold mb-2;
+}
+
+.form-group input{
+    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none ;
+}
+.nav-item a{
+ @apply inline-block text-sm px-4 py-2 leading-none  rounded text-white  hover:text-[#1F485B] hover:bg-white mt-4 lg:mt-0
+}
+
+.nav-item a:last-child{
+    @apply mr-0;
+}
+
+.nav-item a.active{
+    @apply bg-white text-[#1F485B] ;
+}

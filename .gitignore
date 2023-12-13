@@ -1,6 +1,8 @@
 #Ignorer le dossier node_modules
 node_modules/
 
+Morpion/static/CACHE/
+
 *.pyc
 
 package.json
