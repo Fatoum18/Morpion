@@ -6,7 +6,8 @@
 
 {% block pageContainer %}
   <div class="flex flex-col h-full w-full gap-10 mt-4 p-5 place-items-center">
-    <form class="bg-white shadow-md rounded px-14 pt-6 pb-8 mb-4">
+    <form method="post" action="" class="bg-white shadow-md rounded px-14 pt-6 pb-8 mb-4">
+      {% csrf_token %}
       <div class="flex flex-col gap-4">
         <span class="text-gray-700 text-lg font-bold">Creation d'une partie</span>
         <span class="text-gray-700 text-xs">Veuillez remplir le formulaire pour creer une partie</span>

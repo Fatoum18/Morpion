@@ -9,7 +9,7 @@ body{
     
 }
 
-button,[type='button']{
+button,[type='button'],[type='submit']{
     @apply bg-[#1F485B] min-w-[100px]  hover:bg-[#206E93] text-white font-bold py-2 px-4 rounded focus:outline-none;
 }
 
