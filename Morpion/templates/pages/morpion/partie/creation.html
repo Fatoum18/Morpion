@@ -13,6 +13,7 @@
         <span class="text-gray-700 text-xs">Veuillez remplir le formulaire pour creer une partie</span>
       </div>
       <div class="flex flex-col gap-4 mt-10 min-w-[300px]">
+
         <div class="form-group">
           <label for="title">Titre</label>
           <input name="title" type="text" placeholder="Titre de la partie" />
@@ -25,14 +26,14 @@
           </div>
 
           <div class="form-group">
-            <label for="alignement">Alignement</label>
-            <input name="alignement" type="number" placeholder="Alignement" />
+            <label for="alignment">Alignement</label>
+            <input name="alignment" type="number" placeholder="Alignement" />
           </div>
         </div>
 
         <div class="form-group">
           <label for="visibility">Visibilite</label>
-          <select id="visibility" class="visibility">
+          <select id="visibility" name="visibility" class="visibility">
             <option selected disabled>Choisir la visibilite</option>
             <option value="PUBLIC">Public</option>
             <option value="PRIVATE">Prive</option>
@@ -45,7 +46,7 @@
           </div>
 
         <div class="flex items-center justify-between">
-          <button type="button">Creer</button>
+          <button type="submit">Creer</button>
           <a href="{% url 'partie' %}">Annuler</a>
         </div>
       </div>
