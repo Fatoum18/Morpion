@@ -1,95 +1,34 @@
 {% extends 'base-page.html' %}
 {% load static %}
 {% block title %}
-<title>HELBMorpion | Parties</title>
-{% endblock title %}
+  <title>HELBMorpion | Parties</title>
+{% endblock %}
 
 {% block pageContainer %}
-<div class="flex flex-col h-full w-full gap-10 mt-4  p-5 mx-0">
-  <div class="w-full">
-      <a href="{% url 'creation_partie' %}">
-        <button > Creer une partie</button>
-      </a>
+  <div class="flex flex-col h-full gap-10 mt-4 p-5 mb-4">
+    <div class="w-full">
+      <a href="{% url 'creation_partie' %}"><button>Creer une partie</button></a>
+    </div>
+
+    <span class="font-extrabold text-2xl mt-10">Publics & Privees</span>
+    <div class="grid grid-cols-2 gap-x-14 gap-y-8">
+
+      {%for item in '123456789'%}
+        {% comment %} Partie item {% endcomment %}
+        <div class="flex p-4 bg-white shadow-md rounded items-center gap-12">
+          <div class="flex  items-center">
+            <img alt="Morpion" class="h-[86px] w-[86px] rounded" src="{% static 'morpion.png' %}" />
+            {% comment %}Morpion description{% endcomment %}
+            <div class="flex flex-col justify-between flex-1 ps-4">
+              <span class="font-semibold text-xl">Partie {{item}}</span>
+              <span>Taille : <span class="font-medium">10 x 10</span></span>
+              <span>Alignement : <span class="font-medium">13</span></span>
+              <span>Type : <span class="font-medium">Publique</span></span>
+            </div>
+          </div>
+          <button type="button">Rejoindre</button>
+        </div>
+      {% endfor %}
+    </div>
   </div>
-  <div class="grid grid-cols-2 gap-4">
-    
-    <div class="flex p-4  bg-white shadow-md  rounded items-center">
-      <img alt="Morpion" class="h-[86px] w-[86px] rounded" src="{% static "morpion.png" %}"/>
-      {% comment %} Morpion description {% endcomment %}
-      <div class="flex flex-col justify-between flex-1 ps-4">
-        <span class="font-semibold text-xl">Partie 1</span>
-        <span>Taille :  10 x 10</span>
-        <span>Alignement : 3 </span>
-        <span>Type : Publique</span>
-      </div>
-      <button type="button">Rejoindre</button>
-    </div>
-
-
-    <div class="flex p-4  bg-white shadow-md  rounded items-center">
-      <img alt="Morpion" class="h-[86px] w-[86px] rounded" src="{% static "morpion.png" %}"/>
-      {% comment %} Morpion description {% endcomment %}
-      <div class="flex flex-col justify-between flex-1 ps-4">
-        <span class="font-semibold text-xl">Partie 1</span>
-        <span>Taille :  10 x 10</span>
-        <span>Alignement : 3 </span>
-        <span>Type : Publique</span>
-      </div>
-      <button type="button">Rejoindre</button>
-    </div>
-
-
-    <div class="flex p-4  bg-white shadow-md  rounded items-center">
-      <img alt="Morpion" class="h-[86px] w-[86px] rounded" src="{% static "morpion.png" %}"/>
-      {% comment %} Morpion description {% endcomment %}
-      <div class="flex flex-col justify-between flex-1 ps-4">
-        <span class="font-semibold text-xl">Partie 1</span>
-        <span>Taille :  10 x 10</span>
-        <span>Alignement : 3 </span>
-        <span>Type : Publique</span>
-      </div>
-      <button type="button">Rejoindre</button>
-    </div>
-
-
-    <div class="flex p-4  bg-white shadow-md  rounded items-center">
-      <img alt="Morpion" class="h-[86px] w-[86px] rounded" src="{% static "morpion.png" %}"/>
-      {% comment %} Morpion description {% endcomment %}
-      <div class="flex flex-col justify-between flex-1 ps-4">
-        <span class="font-semibold text-xl">Partie 1</span>
-        <span>Taille :  10 x 10</span>
-        <span>Alignement : 3 </span>
-        <span>Type : Publique</span>
-      </div>
-      <button type="button">Rejoindre</button>
-    </div>
-
-
-    <div class="flex p-4  bg-white shadow-md  rounded items-center">
-      <img alt="Morpion" class="h-[86px] w-[86px] rounded" src="{% static "morpion.png" %}"/>
-      {% comment %} Morpion description {% endcomment %}
-      <div class="flex flex-col justify-between flex-1 ps-4">
-        <span class="font-semibold text-xl">Partie 1</span>
-        <span>Taille :  10 x 10</span>
-        <span>Alignement : 3 </span>
-        <span>Type : Publique</span>
-      </div>
-      <button type="button">Rejoindre</button>
-    </div>
-
-
-    <div class="flex p-4  bg-white shadow-md  rounded items-center">
-      <img alt="Morpion" class="h-[86px] w-[86px] rounded" src="{% static "morpion.png" %}"/>
-      {% comment %} Morpion description {% endcomment %}
-      <div class="flex flex-col justify-between flex-1 ps-4">
-        <span class="font-semibold text-xl">Partie 1</span>
-        <span>Taille :  10 x 10</span>
-        <span>Alignement : 3 </span>
-        <span>Type : Publique</span>
-      </div>
-      <button type="button">Rejoindre</button>
-    </div>
-
-  </div>
-</div>
-{% endblock  %}
+{% endblock %}
