@@ -1,0 +1,53 @@
+{% extends 'base-page.html' %}
+
+{% block title %}
+  <title>Parties | Creation</title>
+{% endblock %}
+
+{% block pageContainer %}
+  <div class="flex flex-col h-full w-full gap-10 mt-4 p-5 place-items-center">
+    <form class="bg-white shadow-md rounded px-14 pt-6 pb-8 mb-4">
+      <div class="flex flex-col gap-4">
+        <span class="text-gray-700 text-lg font-bold">Creation d'une partie</span>
+        <span class="text-gray-700 text-xs">Veuillez remplir le formulaire pour creer une partie</span>
+      </div>
+      <div class="flex flex-col gap-4 mt-10 min-w-[300px]">
+        <div class="form-group">
+          <label for="title">Titre</label>
+          <input name="title" type="text" placeholder="Titre de la partie" />
+        </div>
+
+        <div class="flex justify-between gap-10">
+          <div class="form-group">
+            <label for="size">Taille de la grille</label>
+            <input name="size" type="number" placeholder="Taille" />
+          </div>
+
+          <div class="form-group">
+            <label for="alignement">Alignement</label>
+            <input name="alignement" type="number" placeholder="Alignement" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="visibility">Visibilite</label>
+          <select id="visibility" class="visibility">
+            <option selected disabled>Choisir la visibilite</option>
+            <option value="PUBLIC">Public</option>
+            <option value="PRIVATE">Prive</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+            <label for="access_code">Code d'access</label>
+            <input name="access_code" type="text" placeholder="Code d'access" />
+          </div>
+
+        <div class="flex items-center justify-between">
+          <button type="button">Creer</button>
+          <a href="{% url 'partie' %}">Annuler</a>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -11,7 +11,11 @@ VIEW_PROFIL = 5
 def partie(request):
     
     context = {"ACTIVE_VIEW":VIEW_PARTIE}
-    return render(request, "pages/morpion/partie.html",context)
+    return render(request, "pages/morpion/partie/home.html",context)
+
+def creation_partie(request):
+    context = {"ACTIVE_VIEW":VIEW_PARTIE}
+    return render(request, "pages/morpion/partie/creation.html",context)
 
 def invitation(request):
     
