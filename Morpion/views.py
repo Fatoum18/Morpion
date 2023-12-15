@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 
-from Morpion.models import User
+from Morpion.models import Game, GameConfig, User, get_game_config_or_create
 from Morpion.utils import isEmpty
 
 VIEW_PARTIE = 1
@@ -12,16 +12,47 @@ VIEW_PROFIL = 5
 def partie(request):
     if not request.session.has_key('isLogin'):
         return redirect("signin")  
-     
-    context = {"ACTIVE_VIEW":VIEW_PARTIE}
+    
+    games =  Game.objects.filter()
+    context = {"ACTIVE_VIEW":VIEW_PARTIE,"games":games}
     return render(request, "pages/morpion/partie/home.html",context)
+
 
 def creation_partie(request):
     
     if not request.session.has_key('isLogin'):
         return redirect("signin") 
+
+    error = False
+    success = False
+    message = ""
+    if request.method == 'POST':
+        user_id = request.session["user"]['id']
+        title = request.POST["title"]
+        visibility = request.POST["visibility"]
+        size = request.POST["size"]
+        alignment = request.POST["alignment"]
+        access_code = request.POST["access_code"]
+  
+
+        if visibility=="PRIVATE" and isEmpty(access_code):
+             error = True
+             message = "Veuillez donner un code d'access pour cette partie"
+
         
-    context = {"ACTIVE_VIEW":VIEW_PARTIE}
+
+        if not error:
+            if isEmpty(title):
+                title = "Partie "+str(Game.objects.filter(owner=User(user_id)).count() + 1)
+
+            game = Game(title=title,visibility=visibility,access_code=access_code,config=get_game_config_or_create(size,alignment),owner=User(user_id))
+            game.save()
+            error = False
+            success = True
+            message = "La partie a ete cree avec success"
+ 
+        
+    context = {"ACTIVE_VIEW":VIEW_PARTIE, "error": error,"success":success,"message":message}
     return render(request, "pages/morpion/partie/creation.html",context)
 
 def invitation(request):
@@ -83,6 +114,7 @@ def sign_in(request):
                                        'name': user.name, 'email': user.email}
             request.session["isLogin"] = True
             return redirect("partie")
+    
     return render(request, "pages/auth/sign-in.html",result)
 
 
