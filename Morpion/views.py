@@ -18,6 +18,22 @@ def partie(request):
     return render(request, "pages/morpion/partie/home.html",context)
 
 
+def play_game(request,game_id="game_id"):
+    
+    if not request.session.has_key('isLogin'):
+        return redirect("signin")
+    
+       
+    game = Game.objects.get(id=game_id)
+    
+    
+    if game : 
+        context = {"ACTIVE_VIEW":VIEW_PARTIE,"game" : game,"size":range(game.config.grid_size)}
+        return render(request, "pages/morpion/partie/play.html",context)
+    
+    return redirect("partie")
+
+
 def creation_partie(request):
     
     if not request.session.has_key('isLogin'):

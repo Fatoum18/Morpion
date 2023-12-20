@@ -1,0 +1,35 @@
+{% extends 'base-page.html' %}
+{% load static %}
+{% block title %}
+  <title>HELBMorpion | Game play</title>
+{% endblock %}
+
+{% block pageContainer %}
+  <div class="flex flex-col h-full gap-10 mt-4 p-5 mb-4 w-full">
+    <div class="w-full bg-[#D9D9D9] p-2 min-w-96">
+      <div class="flex flex-col justify-between flex-1 ps-4">
+        <span class="font-semibold text-xl">{{ game.title }}</span>
+        <span>Taille : <span class="font-medium">{{ game.config.grid_size }} x {{ game.config.grid_size }}</span></span>
+        <span>Alignement : <span class="font-medium">{{ game.config.alignment }}</span></span>
+        <span>Type : <span class="font-medium">{{ game.visibility }}</span></span>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-center flex-col gap-5">
+      <table class="border-separate w-fit border-spacing-1">
+        {% for i in size %}
+          <tr>
+            {% for j in size %}
+              <td class="w-[94px] h-[94px] bg-slate-500 hover:cursor-not-allowed rounded">
+                <div class=" flex items-center justify-center">
+                  {{i}},{{j}}
+                </div>
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </table>
+      <button type="button">Abandoner</button>
+    </div>
+  </div>
+{% endblock %}
