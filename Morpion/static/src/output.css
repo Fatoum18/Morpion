@@ -621,32 +621,16 @@ video {
   height: 86px;
 }
 
+.h-\[94px\] {
+  height: 94px;
+}
+
 .h-full {
   height: 100%;
 }
 
 .h-screen {
   height: 100vh;
-}
-
-.h-14 {
-  height: 3.5rem;
-}
-
-.h-28 {
-  height: 7rem;
-}
-
-.h-64 {
-  height: 16rem;
-}
-
-.h-16 {
-  height: 4rem;
-}
-
-.h-\[94px\] {
-  height: 94px;
 }
 
 .w-6 {
@@ -657,36 +641,8 @@ video {
   width: 86px;
 }
 
-.w-full {
-  width: 100%;
-}
-
-.w-\[728px\] {
-  width: 728px;
-}
-
-.w-14 {
-  width: 3.5rem;
-}
-
-.w-auto {
-  width: auto;
-}
-
-.w-\[50\%\] {
-  width: 50%;
-}
-
-.w-\[768px\] {
-  width: 768px;
-}
-
-.w-\[33\%\] {
-  width: 33%;
-}
-
-.w-\[33\.33\%\] {
-  width: 33.33%;
+.w-\[94px\] {
+  width: 94px;
 }
 
 .w-fit {
@@ -694,12 +650,12 @@ video {
   width: fit-content;
 }
 
-.w-16 {
-  width: 4rem;
+.w-full {
+  width: 100%;
 }
 
-.w-\[94px\] {
-  width: 94px;
+.min-w-96 {
+  min-width: 24rem;
 }
 
 .min-w-\[300px\] {
@@ -708,10 +664,6 @@ video {
 
 .min-w-\[340px\] {
   min-width: 340px;
-}
-
-.min-w-96 {
-  min-width: 24rem;
 }
 
 .flex-1 {
@@ -726,29 +678,13 @@ video {
   flex-grow: 1;
 }
 
-.table-auto {
-  table-layout: auto;
-}
-
 .border-separate {
   border-collapse: separate;
-}
-
-.border-spacing-4 {
-  --tw-border-spacing-x: 1rem;
-  --tw-border-spacing-y: 1rem;
-  border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
 }
 
 .border-spacing-1 {
   --tw-border-spacing-x: 0.25rem;
   --tw-border-spacing-y: 0.25rem;
-  border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
-}
-
-.border-spacing-2 {
-  --tw-border-spacing-x: 0.5rem;
-  --tw-border-spacing-y: 0.5rem;
   border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
 }
 
@@ -852,6 +788,11 @@ video {
   background-color: rgb(31 72 91 / var(--tw-bg-opacity));
 }
 
+.bg-\[\#D9D9D9\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(217 217 217 / var(--tw-bg-opacity));
+}
+
 .bg-blue-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(219 234 254 / var(--tw-bg-opacity));
@@ -862,23 +803,22 @@ video {
   background-color: rgb(254 226 226 / var(--tw-bg-opacity));
 }
 
-.bg-white {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
-.bg-\[\#D9D9D9\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(217 217 217 / var(--tw-bg-opacity));
-}
-
 .bg-slate-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(100 116 139 / var(--tw-bg-opacity));
 }
 
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
 .fill-current {
   fill: currentColor;
+}
+
+.p-2 {
+  padding: 0.5rem;
 }
 
 .p-4 {
@@ -891,10 +831,6 @@ video {
 
 .p-6 {
   padding: 1.5rem;
-}
-
-.p-2 {
-  padding: 0.5rem;
 }
 
 .px-14 {
@@ -929,14 +865,6 @@ video {
   padding-top: 1.5rem;
 }
 
-.pb-\[50\%\] {
-  padding-bottom: 50%;
-}
-
-.pb-\[50px\] {
-  padding-bottom: 50px;
-}
-
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
@@ -960,6 +888,11 @@ video {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .font-bold {
@@ -1019,6 +952,11 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity));
 }
 
 .shadow-md {
@@ -1161,10 +1099,6 @@ button:focus,[type='button']:focus,[type='submit']:focus {
   color: rgb(31 72 91 / var(--tw-text-opacity));
 }
 
-.hover\:cursor-default:hover {
-  cursor: default;
-}
-
 .hover\:cursor-not-allowed:hover {
   cursor: not-allowed;
 }
@@ -1181,12 +1115,6 @@ button:focus,[type='button']:focus,[type='submit']:focus {
 .hover\:text-\[\#1F485B\]:hover {
   --tw-text-opacity: 1;
   color: rgb(31 72 91 / var(--tw-text-opacity));
-}
-
-.hover\:shadow-md:hover {
-  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 @media (min-width: 640px) {

@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-
+from django.http import JsonResponse
 from Morpion.models import Game, GameConfig, User, get_game_config_or_create
 from Morpion.utils import isEmpty
 
@@ -17,7 +17,47 @@ def partie(request):
     context = {"ACTIVE_VIEW":VIEW_PARTIE,"games":games}
     return render(request, "pages/morpion/partie/home.html",context)
 
+def make_move(request,game_id="game_id"):
+    
+    if not request.session.has_key('isLogin'):
+        return redirect("signin")
+           
+    row = int(request.POST.get('row'))
+    col = int(request.POST.get('col'))
+    game = Game.objects.get(id=game_id)
+    user_id = request.session["user"]['id']
+    
+    if game.current_player!=User(user_id):
+        
+        response_data = {
+            'message': "It's not your turn"
+        }
 
+        return JsonResponse(response_data, status=403)
+    
+    if game.board[row][col] is None:
+        recent_player = game.current_player
+        game.board[row][col] = game.current_player.id
+        game.current_player = game.player2 if game.current_player == game.player1 else game.player1
+        game.save()
+
+        response_data = {
+            'message': 'Move made successfully',
+            'player':{
+                'id' : recent_player.id,
+                'name':  game.current_player.name
+            }
+        }
+
+        return JsonResponse(response_data)
+    else:
+        response_data = {
+            'message': 'Cell already taken. Try again.'
+        }
+
+        return JsonResponse(response_data, status=400)
+    
+    
 def play_game(request,game_id="game_id"):
     
     if not request.session.has_key('isLogin'):
@@ -28,6 +68,11 @@ def play_game(request,game_id="game_id"):
     
     
     if game : 
+        user_id = request.session["user"]['id']
+        if  game.owner.id!=user_id and not game.player2:
+            game.player2 = User(user_id)
+            print("Register Player2 = ",user_id)
+            game.save()
         context = {"ACTIVE_VIEW":VIEW_PARTIE,"game" : game,"size":range(game.config.grid_size)}
         return render(request, "pages/morpion/partie/play.html",context)
     
@@ -58,10 +103,19 @@ def creation_partie(request):
         
 
         if not error:
+            current_player = User(user_id)
             if isEmpty(title):
-                title = "Partie "+str(Game.objects.filter(owner=User(user_id)).count() + 1)
-
-            game = Game(title=title,visibility=visibility,access_code=access_code,config=get_game_config_or_create(size,alignment),owner=User(user_id))
+                title = "Partie "+str(Game.objects.filter(owner=current_player).count() + 1)
+            size = int('0'+size)
+            alignment = int('0'+alignment)
+            game = Game(title=title, 
+                        board=[[None] * size for _ in range(size)],
+                        visibility=visibility,
+                        access_code=access_code,
+                        config=get_game_config_or_create(size,alignment),
+                        owner=current_player,
+                        current_player=current_player,
+                        player1=current_player)
             game.save()
             error = False
             success = True
@@ -98,7 +152,7 @@ def statistique(request):
 
 
 def profil(request):
-    
+    # Game.objects.all().delete()
     if not request.session.has_key('isLogin'):
         return redirect("signin")   
             

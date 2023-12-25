@@ -16,13 +16,23 @@
     </div>
 
     <div class="flex items-center justify-center flex-col gap-5">
+      <div class="flex text-4xl">
+        &#x25CD;  &#x25B3; &#x25B2; &#x25CE; &#x25CF; &#x25CC; &#x25FB; &#x25FC; &#x25CB; &#x25C6;
+      </div>
+      <div class="flex text-xl">
+        <p>
+          <span id="playerTurnMessage" class="text-red-600">{{game.current_player.name}}</span> c'est a ton tour de jouer
+        </p>
+      </div>
       <table class="border-separate w-fit border-spacing-1">
-        {% for i in size %}
+        {% for row in game.board %}
           <tr>
-            {% for j in size %}
-              <td class="w-[94px] h-[94px] bg-slate-500 hover:cursor-not-allowed rounded">
-                <div class=" flex items-center justify-center">
-                  {{i}},{{j}}
+            {% for cell in row %}
+              <td class="w-[94px] h-[94px] bg-slate-500  rounded" >
+                <div  class="w-full  h-full flex items-center justify-center text-4xl" data-row="{{ forloop.parentloop.counter0 }}" data-col="{{ forloop.counter0 }}"  onclick="makeMove(this,{{game.id}})" > 
+                  {% comment %} △ {% endcomment %}
+                  {% comment %} {{i}},{{j}} {% endcomment %}
+                  {{ cell|default:"" }}
                 </div>
               </td>
             {% endfor %}

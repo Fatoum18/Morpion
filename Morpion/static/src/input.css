@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-
+ 
 body{
     @apply min-h-screen h-full w-full bg-[#E9EBED];
     
@@ -37,5 +37,5 @@ button,[type='button'],[type='submit']{
 }
 
 .nav-item a.active{
-    @apply bg-white text-[#1F485B] ;
+    @apply bg-white text-[#1F485B];
 }

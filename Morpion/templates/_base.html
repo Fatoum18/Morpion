@@ -1,31 +1,54 @@
 {% load compress %}
 {% load static %}
 
- 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% comment %} <link href="{% static "style/style.css" %}" rel="stylesheet"> {% endcomment %}
+    {% compress css %}
+    <link href="{% static 'src/output.css' %}" rel="stylesheet" />
+    {% endcompress %}
 
-{% compress css %}
-  <link href="{% static "src/output.css" %}" rel="stylesheet">
-{% endcompress %}
+    {% block title %}
+      <title>HELBMorpion</title>
+    {% endblock %}
+  </head>
 
-{% block title %}
-<title>HELBMorpion</title>
-{% endblock title %}
-</head>
-
-<body>
-
+  <body>
     {% block content %}
 
-    {% endblock content %}
- 
-</body>
-
+    {% endblock %}
+    <script>
+      function makeMove(cell, gameId) {
+        const row = cell.dataset.row
+        const col = cell.dataset.col
+      
+        fetch(`/make_move/${gameId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: `row=${row}&col=${col}`
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert(data.message)
+            if (data.player) {
+              cell.textContent = data.player.id
+              updatePlayerTurnMessage(data.player.name)
+            }
+            //location.reload();
+          })
+          .catch((error) => console.error('Error:', error))
+      }
+      
+      function updatePlayerTurnMessage(currentPlayer) {
+        const playerTurnMessageElement = document.getElementById('playerTurnMessage')
+        playerTurnMessageElement.textContent = `${currentPlayer}`
+      }
+    </script>
+  </body>
 </html>
