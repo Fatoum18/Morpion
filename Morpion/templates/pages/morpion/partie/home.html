@@ -12,21 +12,33 @@
 
     <span class="font-extrabold text-2xl mt-10">Publics & Privees</span>
     <div class="grid grid-cols-2 gap-x-14 gap-y-8">
-
-      {%for game in  games %}
-        {% comment %} Partie item {% endcomment %}
-        <div class="flex p-4 bg-white shadow-md rounded items-center gap-12">
-          <div class="flex  items-center">
-            <img alt="Morpion" class="h-[86px] w-[86px] rounded" src="{% static 'morpion.png' %}" />
-            {% comment %}Morpion description{% endcomment %}
-            <div class="flex flex-col justify-between flex-1 ps-4">
-              <span class="font-semibold text-xl"> {{game.title}}</span>
-              <span>Taille : <span class="font-medium">{{game.config.grid_size}} x {{game.config.grid_size}}</span></span>
-              <span>Alignement : <span class="font-medium">{{game.config.alignment}}</span></span>
-              <span>Type : <span class="font-medium">{{game.visibility}}</span></span>
+      {% for game in games %}
+        {% comment %}Partie item{% endcomment %}
+        <div class="flex flex-col p-4 bg-white shadow-md rounded gap-4">
+          <div class="flex">
+            <div class="flex flex-1 gap-2">
+              <img alt="Morpion" class="rounded-full h-[48px] w-[48px] bg-gray-400" src="{% static 'avatar.png' %}" />
+              <div class="flex flex-col text-gray-500">
+                <span class="font-semibold text-xl">{{ game.owner.name }}</span>
+                <span class="text-sm">{{ game.owner.email }}</span>
+              </div>
             </div>
+
+            <span class="text-gray-500 text-sm">{{ game.created_at }}</span>
           </div>
-          <a href="{% url 'play_game' game.id %}"> <button type="button">Rejoindre</button> </a>
+          <div class="flex gap-12 items-center">
+            <div class="flex items-center">
+              <img alt="Morpion" class="h-[96px] w-[96px] rounded" src="{% static 'g12.png' %}" />
+              {% comment %}Morpion description{% endcomment %}
+              <div class="flex flex-col justify-between flex-1 ps-4">
+                <span class="font-semibold text-xl">{{ game.title }}</span>
+                <span>Taille : <span class="font-medium">{{ game.config.grid_size }} x {{ game.config.grid_size }}</span></span>
+                <span>Alignement : <span class="font-medium">{{ game.config.alignment }}</span></span>
+                <span>Type : <span class="font-medium">{{ game.visibility }}</span></span>
+              </div>
+            </div>
+            <a href="{% url 'play_game' game.id %}"><button type="button">Rejoindre</button></a>
+          </div>
         </div>
       {% endfor %}
     </div>

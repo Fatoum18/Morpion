@@ -617,12 +617,12 @@ video {
   height: 1.5rem;
 }
 
-.h-\[86px\] {
-  height: 86px;
-}
-
 .h-\[94px\] {
   height: 94px;
+}
+
+.h-\[96px\] {
+  height: 96px;
 }
 
 .h-full {
@@ -633,16 +633,20 @@ video {
   height: 100vh;
 }
 
+.h-\[48px\] {
+  height: 48px;
+}
+
 .w-6 {
   width: 1.5rem;
 }
 
-.w-\[86px\] {
-  width: 86px;
-}
-
 .w-\[94px\] {
   width: 94px;
+}
+
+.w-\[96px\] {
+  width: 96px;
 }
 
 .w-fit {
@@ -652,6 +656,10 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-\[48px\] {
+  width: 48px;
 }
 
 .min-w-96 {
@@ -732,6 +740,14 @@ video {
   gap: 1.25rem;
 }
 
+.gap-8 {
+  gap: 2rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
 .gap-x-14 {
   -moz-column-gap: 3.5rem;
        column-gap: 3.5rem;
@@ -749,6 +765,10 @@ video {
 
 .rounded {
   border-radius: 0.25rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
 }
 
 .border {
@@ -813,6 +833,11 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-gray-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(156 163 175 / var(--tw-bg-opacity));
+}
+
 .fill-current {
   fill: currentColor;
 }
@@ -870,6 +895,11 @@ video {
   line-height: 2rem;
 }
 
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -890,11 +920,6 @@ video {
   line-height: 1rem;
 }
 
-.text-4xl {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-}
-
 .font-bold {
   font-weight: 700;
 }
@@ -909,6 +934,10 @@ video {
 
 .font-semibold {
   font-weight: 600;
+}
+
+.font-light {
+  font-weight: 300;
 }
 
 .leading-none {
@@ -944,6 +973,11 @@ video {
   color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity));
+}
+
 .text-red-700 {
   --tw-text-opacity: 1;
   color: rgb(185 28 28 / var(--tw-text-opacity));
@@ -954,9 +988,9 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-.text-red-600 {
+.text-gray-500 {
   --tw-text-opacity: 1;
-  color: rgb(220 38 38 / var(--tw-text-opacity));
+  color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 
 .shadow-md {
@@ -1097,10 +1131,6 @@ button:focus,[type='button']:focus,[type='submit']:focus {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(31 72 91 / var(--tw-text-opacity));
-}
-
-.hover\:cursor-not-allowed:hover {
-  cursor: not-allowed;
 }
 
 .hover\:border-transparent:hover {

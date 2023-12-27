@@ -23,6 +23,7 @@ urlpatterns = [
     path('partie/create', views.creation_partie, name="creation_partie"),
     path('partie/<int:game_id>/play', views.play_game, name="play_game"),
     path('make_move/<int:game_id>', views.make_move, name='make_move'),
+    path('partie_auth/<int:game_id>', views.partie_auth, name='partie_auth'),
     path('invitations', views.invitation, name="invitations"),
     path('notifications', views.notification, name="notifications"),
     path('statistiques', views.statistique, name="statistiques"),
