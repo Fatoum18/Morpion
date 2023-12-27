@@ -28,31 +28,7 @@ class Game(models.Model):
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player1_games',null=True, blank=True)
     player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player2_games',null=True, blank=True)
 
-    def check_winner(self):
-        # Define winning combinations
-        size = self.config.grid_size  # Assuming the board is square
-        winning_combinations = []
-
-        # Rows and Columns
-        for i in range(size):
-            row = [i * size + j for j in range(size)]
-            col = [j * size + i for j in range(size)]
-            winning_combinations.append(row)
-            winning_combinations.append(col)
-
-        # Diagonals
-        diagonal1 = [i * (size + 1) for i in range(size)]
-        diagonal2 = [i * (size - 1) + (size - 1) for i in range(size)]
-        winning_combinations.append(diagonal1)
-        winning_combinations.append(diagonal2)
-
-        # Check for a winner
-        for combo in winning_combinations:
-            if all(self.board[combo[i]] == self.board[combo[i + 1]] != ' ' for i in range(len(combo) - 1)):
-                return True  # We have a winner!
-
-        return False  # No winner yet
-       
+ 
 def get_game_config_or_create (size,alignment):  
     game_config = GameConfig.objects.filter(grid_size=size,alignment=alignment).first()
     if not game_config:

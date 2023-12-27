@@ -11,3 +11,5 @@ python3 -m pip install django-compressor
 python3 manage.py runserver
 
 npx tailwindcss -i ./Morpion/static/src/input.css -o  ./Morpion/static/src/output.css --watch
+
+pip3 install channels #

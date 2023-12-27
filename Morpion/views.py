@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from Morpion.models import Game, GameConfig, User, get_game_config_or_create
 from Morpion.utils import isEmpty
+from channels.layers import get_channel_layer
 
 VIEW_PARTIE = 1
 VIEW_INVITATION = 2
@@ -48,6 +49,7 @@ def make_move(request,game_id="game_id"):
                 'name':  game.current_player.name
             }
         }
+        
 
         return JsonResponse(response_data)
     else:

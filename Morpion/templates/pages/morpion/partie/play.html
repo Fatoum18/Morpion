@@ -30,8 +30,6 @@
             {% for cell in row %}
               <td class="w-[94px] h-[94px] bg-slate-500  rounded" >
                 <div  class="w-full  h-full flex items-center justify-center text-4xl" data-row="{{ forloop.parentloop.counter0 }}" data-col="{{ forloop.counter0 }}"  onclick="makeMove(this,{{game.id}})" > 
-                  {% comment %} △ {% endcomment %}
-                  {% comment %} {{i}},{{j}} {% endcomment %}
                   {{ cell|default:"" }}
                 </div>
               </td>
