@@ -40,7 +40,7 @@ def partie(request):
     if not request.session.has_key('isLogin'):
         return redirect("signin")
 
-    games = Game.objects.filter()
+    games = Game.objects.all().order_by("-created_at")
     context = {"ACTIVE_VIEW": VIEW_PARTIE, "games": games}
     return render(request, "pages/morpion/partie/home.html", context)
 
@@ -58,46 +58,54 @@ def make_move(request, game_id="game_id"):
     if game.current_player != User(user_id):
 
         response_data = {
-            'message': "It's not your turn"
+            'message': "It's not your turn",
+            "is_error": True
         }
 
         return JsonResponse(response_data, status=403)
 
-    if game.board[row][col] is None:
-        recent_player = game.current_player
-        game.board[row][col] = game.current_player.id
+    if game.board[row][col] is None:  
+        game.board[row][col] = game.symbol[str(game.current_player.id)]
         game.current_player = game.player2 if game.current_player == game.player1 else game.player1
         game.save()
+ 
 
-        response_data = {
-            'message': 'Move made successfully',
-            'player': {
-                'id': recent_player.id,
-                'name':  game.current_player.name
-            }
-        }
-
-        return JsonResponse(response_data)
+        return JsonResponse({})
     else:
         response_data = {
-            'message': 'Cell already taken. Try again.'
+            'message': 'Cell already taken. Try again.',
+            "is_error": True
         }
 
         return JsonResponse(response_data, status=400)
 
 
+def update_symbol(request, game_id="game_id"):
+    
+    if request.method == 'POST':
+        user_id = request.session["user"]['id'] 
+        symbol = request.POST["symbol"] 
+        game = Game.objects.get(id=game_id)
+        game.symbol[user_id]=symbol
+        game.save()
+    return redirect("play_game",game_id=game_id)
+
+    
 def play_game(request, game_id="game_id"):
 
     if not request.session.has_key('isLogin'):
         return redirect("signin")
 
     game = Game.objects.get(id=game_id)
+    user_id = request.session["user"]['id']
 
     if game:
-        context = {"ACTIVE_VIEW": VIEW_PARTIE, "game": game,
-                   "size": range(game.config.grid_size)}
-
-        user_id = request.session["user"]['id']
+        context = {
+                    "ACTIVE_VIEW": VIEW_PARTIE, 
+                    "game": game,
+                    "size": range(game.config.grid_size),
+                    "hasSymbol" : False if not game.symbol else str(user_id) in game.symbol 
+                }
 
         if game.visibility == "PRIVATE" and game.owner.id != user_id:  # Pour les parties privees
 
@@ -124,7 +132,7 @@ def creation_partie(request):
         user_id = request.session["user"]['id']
         title = request.POST["title"]
         visibility = request.POST["visibility"]
-        size = request.POST["size"]
+        size = request.POST["size"] 
         alignment = request.POST["alignment"]
         access_code = request.POST["access_code"]
 
@@ -139,6 +147,7 @@ def creation_partie(request):
                     str(Game.objects.filter(owner=current_player).count() + 1)
             size = int('0'+size)
             alignment = int('0'+alignment)
+          
             game = Game(title=title,
                         board=[[None] * size for _ in range(size)],
                         visibility=visibility,
@@ -146,7 +155,9 @@ def creation_partie(request):
                         config=get_game_config_or_create(size, alignment),
                         owner=current_player,
                         current_player=current_player,
-                        player1=current_player)
+                        player1=current_player,
+                        symbol={})
+           
             game.save()
             error = False
             success = True
@@ -283,3 +294,6 @@ def global_vars(request):
         'VIEW_STATISTIQUE': VIEW_STATISTIQUE,
         'VIEW_PROFIL': VIEW_PROFIL,
     }
+
+
+

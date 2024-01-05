@@ -16,28 +16,50 @@
     </div>
 
     <div class="flex items-center justify-center flex-col gap-5">
-      <div class="flex text-4xl">
-        &#x25CD;  &#x25B3; &#x25B2; &#x25CE; &#x25CF; &#x25CC; &#x25FB; &#x25FC; &#x25CB; &#x25C6;
-      </div>
-      <div class="flex text-xl">
-        <p>
-          <span id="playerTurnMessage" class="text-red-600">{{game.current_player.name}}</span> c'est a ton tour de jouer
-        </p>
-      </div>
-      <table class="border-separate w-fit border-spacing-1">
-        {% for row in game.board %}
-          <tr>
-            {% for cell in row %}
-              <td class="w-[94px] h-[94px] bg-slate-500  rounded" >
-                <div  class="w-full  h-full flex items-center justify-center text-4xl" data-row="{{ forloop.parentloop.counter0 }}" data-col="{{ forloop.counter0 }}"  onclick="makeMove(this,{{game.id}})" > 
-                  {{ cell|default:"" }}
-                </div>
-              </td>
-            {% endfor %}
-          </tr>
-        {% endfor %}
-      </table>
-      <button type="button">Abandoner</button>
+
+      {%if not hasSymbol %}
+        <form method="post" action="/update_symbol/{{game.id}}" class="bg-white shadow-md rounded px-14 pt-6 pb-8 mb-4">
+          {% csrf_token %}
+          <div class="flex gap-4">
+            <div class="form-group">
+              <label for="symbol">Veuillez choisir votre symbole</label>
+              <select id="symbol" name="symbol" class="visibility"  onchange="form.submit()">
+                <option selected disabled>Choisir votre symbole</option>
+                <option value="&#x25CD;">&#x25CD;</option>
+                <option value="&#x25B3;">&#x25B3;</option>
+                <option value="&#x25CE;">&#x25CE;</option>
+                <option value="&#x25CF;">&#x25CF;</option>
+                <option value="&#x25CC;">&#x25CC;</option>
+                <option value="&#x25FB;">&#x25FB;</option>
+                <option value="&#x25FC;">&#x25FC;</option>
+                <option value="&#x25CB;">&#x25CB;</option>
+                <option value="&#x25C6;">&#x25C6;</option>
+              </select>
+            </div>
+           
+          </div>
+        </form>
+        {%else%}
+        <div class="flex text-xl">
+          <p>
+            <span id="playerTurnMessage" class="text-red-600">{{ game.current_player.name }}</span> c'est a ton tour de jouer
+          </p>
+        </div>
+        <table class="border-separate w-fit border-spacing-1">
+          {% for row in game.board %}
+            <tr>
+              {% for cell in row %}
+                <td class="w-[94px] h-[94px] bg-slate-500 rounded">
+                  <div class="w-full h-full flex items-center justify-center text-4xl" data-row="{{ forloop.parentloop.counter0 }}" data-col="{{ forloop.counter0 }}" onclick="makeMove(this,{{ game.id }})">{{ cell|default:'' }}</div>
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </table>
+        <button type="button">Abandoner</button>
+      {% endif %}
+     
+
     </div>
   </div>
 {% endblock %}

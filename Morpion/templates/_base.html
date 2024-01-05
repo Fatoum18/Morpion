@@ -35,12 +35,13 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            alert(data.message)
-            if (data.player) {
-              cell.textContent = data.player.id
-              updatePlayerTurnMessage(data.player.name)
+            
+            if(data.is_error){
+
+              alert(data.message)
             }
-            //location.reload();
+  
+            location.reload();
           })
           .catch((error) => console.error('Error:', error))
       }

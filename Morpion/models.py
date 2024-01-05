@@ -27,6 +27,7 @@ class Game(models.Model):
     current_player = models.ForeignKey(User, on_delete=models.CASCADE, related_name='current_player', null=True, blank=True)
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player1_games',null=True, blank=True)
     player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player2_games',null=True, blank=True)
+    symbol = models.JSONField(blank=True,null=True)
 
  
 def get_game_config_or_create (size,alignment):  
