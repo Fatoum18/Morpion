@@ -12,18 +12,34 @@
         <span>Taille : <span class="font-medium">{{ game.config.grid_size }} x {{ game.config.grid_size }}</span></span>
         <span>Alignement : <span class="font-medium">{{ game.config.alignment }}</span></span>
         <span>Type : <span class="font-medium">{{ game.visibility }}</span></span>
+
+        {% if symbol_1 %}
+          <span>Player 1 : <span class="font-medium">{{ game.player1.name }} {{ symbol_1 }}</span></span>
+        {% endif %}
+
+        {% if symbol_2 %}
+          <span>Player 2 : <span class="font-medium">{{ game.player2.name }} {{ symbol_2 }}</span></span>
+        {% endif %}
+
       </div>
     </div>
 
     <div class="flex items-center justify-center flex-col gap-5">
+      {% if not hasSymbol %}
+        <form method="post" action="" class="bg-white shadow-md rounded px-14 pt-6 pb-8 mb-4">
+          {% if has_error %}
+            <div class="bg-red-100 mb-3 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+              <strong class="font-bold">Error !</strong>
+              <span class="block sm:inline text-xs">Le symbole {{ symbol_icon }} est deja utiliser, veuillez choisir un autre</span>
+            </div>
+          {% endif %}
 
-      {%if not hasSymbol %}
-        <form method="post" action="/update_symbol/{{game.id}}" class="bg-white shadow-md rounded px-14 pt-6 pb-8 mb-4">
           {% csrf_token %}
           <div class="flex gap-4">
             <div class="form-group">
               <label for="symbol">Veuillez choisir votre symbole</label>
-              <select id="symbol" name="symbol" class="visibility"  onchange="form.submit()">
+
+              <select id="symbol" name="symbol" class="visibility" onchange="form.submit()">
                 <option selected disabled>Choisir votre symbole</option>
                 <option value="&#x25CD;">&#x25CD;</option>
                 <option value="&#x25B3;">&#x25B3;</option>
@@ -36,10 +52,9 @@
                 <option value="&#x25C6;">&#x25C6;</option>
               </select>
             </div>
-           
           </div>
         </form>
-        {%else%}
+      {% else %}
         <div class="flex text-xl">
           <p>
             <span id="playerTurnMessage" class="text-red-600">{{ game.current_player.name }}</span> c'est a ton tour de jouer
@@ -58,8 +73,6 @@
         </table>
         <button type="button">Abandoner</button>
       {% endif %}
-     
-
     </div>
   </div>
 {% endblock %}

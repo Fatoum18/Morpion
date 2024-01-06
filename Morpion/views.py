@@ -54,7 +54,16 @@ def make_move(request, game_id="game_id"):
     col = int(request.POST.get('col'))
     game = Game.objects.get(id=game_id)
     user_id = request.session["user"]['id']
+    values_list = list(game.symbol.values())
+    
+    
+    if len(values_list) != 2 :
+        response_data = {
+            'message': "Il faut deux joueurs pour commencer la partie",
+            "is_error": True
+        }
 
+        return JsonResponse(response_data, status=403)
     if game.current_player != User(user_id):
 
         response_data = {
@@ -80,15 +89,6 @@ def make_move(request, game_id="game_id"):
         return JsonResponse(response_data, status=400)
 
 
-def update_symbol(request, game_id="game_id"):
-    
-    if request.method == 'POST':
-        user_id = request.session["user"]['id'] 
-        symbol = request.POST["symbol"] 
-        game = Game.objects.get(id=game_id)
-        game.symbol[user_id]=symbol
-        game.save()
-    return redirect("play_game",game_id=game_id)
 
     
 def play_game(request, game_id="game_id"):
@@ -98,7 +98,8 @@ def play_game(request, game_id="game_id"):
 
     game = Game.objects.get(id=game_id)
     user_id = request.session["user"]['id']
-
+ 
+    #Verifie que le partie existe
     if game:
         context = {
                     "ACTIVE_VIEW": VIEW_PARTIE, 
@@ -106,15 +107,37 @@ def play_game(request, game_id="game_id"):
                     "size": range(game.config.grid_size),
                     "hasSymbol" : False if not game.symbol else str(user_id) in game.symbol 
                 }
+        
+        ## Mise a jour des symboles pour la partie
+        if request.method == 'POST': 
+            symbol = request.POST["symbol"]  
+            values_list = list(game.symbol.values())
+            if symbol in values_list:
+                context["has_error"] = True  
+                context["symbol_icon"] = symbol  
+                return render(request, "pages/morpion/partie/play.html", context)
+            
+            game.symbol[user_id]=symbol
+            game.save()
+            return redirect("play_game",game_id=game_id)
 
+        if game.player1 and str(game.player1.id) in game.symbol:
+            context["symbol_1"] = game.symbol[str(game.player1.id)]
+            
+        if game.player2 and str(game.player2.id) in game.symbol:
+            context["symbol_2"] = game.symbol[str(game.player2.id)]
+            
         if game.visibility == "PRIVATE" and game.owner.id != user_id:  # Pour les parties privees
 
             return render(request, "pages/morpion/partie/game-auth.html", context)
 
+
+        
         if game.owner.id != user_id and not game.player2:
             game.player2 = User(user_id)
             print("Register Player2 = ", user_id)
             game.save()
+            
         return render(request, "pages/morpion/partie/play.html", context)
 
     return redirect("partie")
@@ -159,12 +182,14 @@ def creation_partie(request):
                         symbol={})
            
             game.save()
-            error = False
-            success = True
-            message = "La partie a ete cree avec success"
+            return redirect("partie") 
 
-    context = {"ACTIVE_VIEW": VIEW_PARTIE, "error": error,
-               "success": success, "message": message}
+    context = {
+                "ACTIVE_VIEW": VIEW_PARTIE, 
+               "error": error,
+               "success": success, 
+               "message": message
+            }
     return render(request, "pages/morpion/partie/creation.html", context)
 
 
@@ -196,7 +221,7 @@ def statistique(request):
 
 
 def profil(request):
-    # Game.objects.all().delete()
+    #Game.objects.all().delete()
     if not request.session.has_key('isLogin'):
         return redirect("signin")
 
