@@ -66,7 +66,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries':{
+                'get_symbol_player_id' : 'Morpion.templatetags.template_filters'
+            }
         },
+
     },
 ]
 

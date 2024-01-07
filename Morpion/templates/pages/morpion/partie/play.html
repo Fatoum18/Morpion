@@ -1,5 +1,6 @@
 {% extends 'base-page.html' %}
 {% load static %}
+{% load template_filters %}
 {% block title %}
   <title>HELBMorpion | Game play</title>
 {% endblock %}
@@ -13,14 +14,13 @@
         <span>Alignement : <span class="font-medium">{{ game.config.alignment }}</span></span>
         <span>Type : <span class="font-medium">{{ game.visibility }}</span></span>
 
-        {% if symbol_1 %}
-          <span>Player 1 : <span class="font-medium">{{ game.player1.name }} {{ symbol_1 }}</span></span>
+        {% if game.player1 %}
+          <span>Player 1 : <span class="font-medium">{{ game.player1.name }} {{ game|get_symbol_player_id:game.player1.id }}</span></span>
         {% endif %}
 
-        {% if symbol_2 %}
-          <span>Player 2 : <span class="font-medium">{{ game.player2.name }} {{ symbol_2 }}</span></span>
+        {% if game.player2 %}
+          <span>Player 2 : <span class="font-medium">{{ game.player2.name }} {{ game|get_symbol_player_id:game.player2.id }}</span></span>
         {% endif %}
-
       </div>
     </div>
 
@@ -38,7 +38,6 @@
           <div class="flex gap-4">
             <div class="form-group">
               <label for="symbol">Veuillez choisir votre symbole</label>
-
               <select id="symbol" name="symbol" class="visibility" onchange="form.submit()">
                 <option selected disabled>Choisir votre symbole</option>
                 <option value="&#x25CD;">&#x25CD;</option>
@@ -56,22 +55,34 @@
         </form>
       {% else %}
         <div class="flex text-xl">
-          <p>
-            <span id="playerTurnMessage" class="text-red-600">{{ game.current_player.name }}</span> c'est a ton tour de jouer
-          </p>
+          {% if game.status == 'FINISHED' %}
+            <div class="flex flex-col gap-3">
+              <span class="text-green-600">PARTIE TERMINEE !!!</span>
+              <span><span class="text-green-900">{{ game.current_player.name }}</span> a gagner la partie</span>
+            </div>
+          {% else %}
+            <p>
+              <span class="text-red-600">{{ game.current_player.name }}</span> c'est a ton tour de jouer
+            </p>
+          {% endif %}
         </div>
         <table class="border-separate w-fit border-spacing-1">
           {% for row in game.board %}
             <tr>
               {% for cell in row %}
                 <td class="w-[94px] h-[94px] bg-slate-500 rounded">
-                  <div class="w-full h-full flex items-center justify-center text-4xl" data-row="{{ forloop.parentloop.counter0 }}" data-col="{{ forloop.counter0 }}" onclick="makeMove(this,{{ game.id }})">{{ cell|default:'' }}</div>
+                  <div class="w-full h-full flex items-center justify-center text-4xl" data-row="{{ forloop.parentloop.counter0 }}" data-col="{{ forloop.counter0 }}" onclick="makeMove(this,{{ game.id }})">
+                    {% comment %} {{ cell|default:'' }} {% endcomment %}
+                    {{ game|get_symbol_player_id:cell|default:'' }}
+                  </div>
                 </td>
               {% endfor %}
             </tr>
           {% endfor %}
         </table>
-        <button type="button">Abandoner</button>
+        {% if game.status != 'FINISHED' %}
+          <button type="button">Abandoner</button>
+        {% endif %}
       {% endif %}
     </div>
   </div>

@@ -37,7 +37,9 @@
                 <span>Type : <span class="font-medium">{{ game.visibility }}</span></span>
               </div>
             </div>
+           
             <a href="{% url 'play_game' game.id %}"><button type="button">Rejoindre</button></a>
+           
           </div>
         </div>
       {% endfor %}

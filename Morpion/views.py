@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from Morpion.models import Game, GameConfig, User, get_game_config_or_create
-from Morpion.utils import isEmpty
+from django.db.models import Q
+from Morpion.models import Game, GameConfig,create_or_inc_score, User, get_game_config_or_create
+from Morpion.utils import isEmpty,has_winner
+ 
 
 VIEW_PARTIE = 1
 VIEW_INVITATION = 2
@@ -40,7 +42,7 @@ def partie(request):
     if not request.session.has_key('isLogin'):
         return redirect("signin")
 
-    games = Game.objects.all().order_by("-created_at")
+    games = Game.objects.filter(~Q(status="FINISHED")).order_by("-created_at")
     context = {"ACTIVE_VIEW": VIEW_PARTIE, "games": games}
     return render(request, "pages/morpion/partie/home.html", context)
 
@@ -57,26 +59,37 @@ def make_move(request, game_id="game_id"):
     values_list = list(game.symbol.values())
     
     
-    if len(values_list) != 2 :
-        response_data = {
-            'message': "Il faut deux joueurs pour commencer la partie",
-            "is_error": True
-        }
-
+    
+    response_data = {}
+    
+    if game.status=="FINISHED":
+        response_data["message"]= "Cette partie est terminee"
+        response_data["is_error"]=True 
         return JsonResponse(response_data, status=403)
+    
+    if len(values_list) != 2 :
+        response_data["message"]= "Il faut deux joueurs pour commencer la partie"
+        response_data["is_error"]=True 
+        return JsonResponse(response_data, status=403)
+    
     if game.current_player != User(user_id):
-
-        response_data = {
-            'message': "It's not your turn",
-            "is_error": True
-        }
+        response_data["message"]= "It's not your turn"
+        response_data["is_error"]=True 
+ 
 
         return JsonResponse(response_data, status=403)
 
     if game.board[row][col] is None:  
-        game.board[row][col] = game.symbol[str(game.current_player.id)]
-        game.current_player = game.player2 if game.current_player == game.player1 else game.player1
+        game.board[row][col] = game.current_player.id
+        
+        if has_winner(game):
+            game.status="FINISHED"
+            create_or_inc_score(game) 
+        else:
+            game.current_player = game.player2 if game.current_player == game.player1 else game.player1
+        
         game.save()
+        
  
 
         return JsonResponse({})
@@ -87,6 +100,8 @@ def make_move(request, game_id="game_id"):
         }
 
         return JsonResponse(response_data, status=400)
+
+
 
 
 
@@ -120,13 +135,7 @@ def play_game(request, game_id="game_id"):
             game.symbol[user_id]=symbol
             game.save()
             return redirect("play_game",game_id=game_id)
-
-        if game.player1 and str(game.player1.id) in game.symbol:
-            context["symbol_1"] = game.symbol[str(game.player1.id)]
-            
-        if game.player2 and str(game.player2.id) in game.symbol:
-            context["symbol_2"] = game.symbol[str(game.player2.id)]
-            
+ 
         if game.visibility == "PRIVATE" and game.owner.id != user_id:  # Pour les parties privees
 
             return render(request, "pages/morpion/partie/game-auth.html", context)
@@ -166,8 +175,7 @@ def creation_partie(request):
         if not error:
             current_player = User(user_id)
             if isEmpty(title):
-                title = "Partie " + \
-                    str(Game.objects.filter(owner=current_player).count() + 1)
+                title = "Partie " + str(Game.objects.filter(owner=current_player).count() + 1)
             size = int('0'+size)
             alignment = int('0'+alignment)
           
