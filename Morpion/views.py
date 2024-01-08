@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db.models import Q
-from Morpion.models import Game, GameConfig,create_or_inc_score, User, get_game_config_or_create
+from Morpion.models import Game, Notification, Invitation,Leaderboard,create_or_inc_score, User, get_game_config_or_create,send_invitation,create_notification
 from Morpion.utils import isEmpty,has_winner
  
 
@@ -19,15 +19,11 @@ def partie_auth(request, game_id="game_id"):
 
     result = {'error': False}
     if request.method == 'POST':
-        game = Game.objects.get(id=game_id)
-        user_id = request.session["user"]['id']
+        game = Game.objects.get(id=game_id) 
         access_code = request.POST["access_code"]
         if game.access_code == access_code:
-            print("Joueur authentifier")
-            result = {
-                "ACTIVE_VIEW": VIEW_PARTIE, 
-                "game": game,
-            }
+            request.session["auth_game_"+str(game_id)] = True
+            return redirect("play_game",game_id=game_id)
         else:
             result = {
                 'error': True,
@@ -104,7 +100,27 @@ def make_move(request, game_id="game_id"):
 
 
 
-
+def left_game(request, game_id="game_id"):
+    
+    if not request.session.has_key('isLogin'):
+        return redirect("signin")
+    
+    game = Game.objects.get(id=game_id)
+    
+    if game.status!="FINISHED":
+        user_id = request.session["user"]['id']
+        user_left = User.objects.get(id=user_id)
+        
+        title = f"{game.title} abandonner"
+        content = f"{user_left.name} a abondonner la partie de game <<{game.title}>>"
+        
+        recipeint_user_id = game.player2.id if user_id==game.owner.id else game.player1.id
+        create_notification(recipeint_user_id, title, content)
+        game.status="FINISHED"
+        game.save()
+    return redirect("partie")
+    
+    
     
 def play_game(request, game_id="game_id"):
 
@@ -137,14 +153,12 @@ def play_game(request, game_id="game_id"):
             return redirect("play_game",game_id=game_id)
  
         if game.visibility == "PRIVATE" and game.owner.id != user_id:  # Pour les parties privees
-
-            return render(request, "pages/morpion/partie/game-auth.html", context)
-
-
         
+            if not request.session.has_key("auth_game_"+str(game_id)):
+                return render(request, "pages/morpion/partie/game-auth.html", context)
+ 
         if game.owner.id != user_id and not game.player2:
-            game.player2 = User(user_id)
-            print("Register Player2 = ", user_id)
+            game.player2 = User(user_id) 
             game.save()
             
         return render(request, "pages/morpion/partie/play.html", context)
@@ -201,21 +215,57 @@ def creation_partie(request):
     return render(request, "pages/morpion/partie/creation.html", context)
 
 
+
+def create_invitation(request):
+
+    if not request.session.has_key('isLogin'):
+        return redirect("signin")
+    
+    user_id = request.session["user"]['id']
+    if request.method == 'POST': 
+        game_id = int(request.POST["game"])
+        friend_id = int(request.POST["friend"])
+        message = request.POST["message"]
+        
+        user = User.objects.get(id=user_id)
+        game = Game.objects.get(id=game_id)
+        title = "Invitation partie de morpion "
+        message = f"{user.name} vous invitation a rejoindre une partie de morpion , Detaille de la partie  <<{game.title}>> , Grille: {game.config.grid_size}x{game.config.grid_size} , alignement:{game.config.alignment} \n"+message
+        send_invitation(user_id,game_id,friend_id,title,message)
+        return redirect("invitations") 
+          
+        
+         
+
+ 
+    #Recupere tous les games de l'utilisateur connecter
+    games = Game.objects.filter(owner=User(user_id)).filter(~Q(status="FINISHED")).order_by("-created_at")
+    
+    #Recupere tous les utilisateurs excepter celui connecter
+    friends = User.objects.filter().exclude(id=user_id)
+    context = {"ACTIVE_VIEW": VIEW_INVITATION, "games": games, "friends":friends}
+    return render(request, "pages/morpion/invitation/create.html", context)
+
+
 def invitation(request):
 
     if not request.session.has_key('isLogin'):
         return redirect("signin")
-
-    context = {"ACTIVE_VIEW": VIEW_INVITATION}
-    return render(request, "pages/morpion/invitation.html", context)
+    
+    user_id = request.session["user"]['id'] 
+    invitations = Invitation.objects.filter(sender=User(user_id)).order_by("-created_at")
+    context = {"ACTIVE_VIEW": VIEW_INVITATION,"invitations":invitations}
+    return render(request, "pages/morpion/invitation/home.html", context)
 
 
 def notification(request):
 
     if not request.session.has_key('isLogin'):
         return redirect("signin")
-
-    context = {"ACTIVE_VIEW": VIEW_NOTIFICATION}
+    
+    user_id = request.session["user"]['id'] 
+    messages = Notification.objects.filter(user=User(user_id)).order_by("-created_at")
+    context = {"ACTIVE_VIEW": VIEW_NOTIFICATION, "messages": messages}
     return render(request, "pages/morpion/notification.html", context)
 
 
@@ -223,8 +273,9 @@ def statistique(request):
 
     if not request.session.has_key('isLogin'):
         return redirect("signin")
-
-    context = {"ACTIVE_VIEW": VIEW_STATISTIQUE}
+    user_id = request.session["user"]['id'] 
+    rankings =  Leaderboard.objects.filter(player=User(user_id))
+    context = {"ACTIVE_VIEW": VIEW_STATISTIQUE, "rankings":rankings}
     return render(request, "pages/morpion/statistique.html", context)
 
 
@@ -232,8 +283,10 @@ def profil(request):
     #Game.objects.all().delete()
     if not request.session.has_key('isLogin'):
         return redirect("signin")
-
-    context = {"ACTIVE_VIEW": VIEW_PROFIL}
+    user_id = request.session["user"]['id']
+    user = User.objects.get(id=user_id)
+    game_count = Game.objects.filter(owner=User(user_id)).count()
+    context = {"ACTIVE_VIEW": VIEW_PROFIL,"user":user,"game_count":game_count}
     return render(request, "pages/morpion/profil.html", context)
 
 

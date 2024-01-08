@@ -1,15 +1,36 @@
 {% extends 'base-page.html' %}
 
-
 {% block title %}
-<title>HELBMorpion | Statistiques</title>
-{% endblock title %}
+  <title>HELBMorpion | Statistiques</title>
+{% endblock %}
 
 {% block pageContainer %}
-<div class="flex flex-col h-full w-full gap-10 mt-4  p-5">
-    <div class="w-full">
-        Statistique
+  <div class="flex flex-col h-full w-full gap-10 mt-4 p-5">
+    <div class="w-full">Statistique</div>
+    <div class="rounded-xl mx-auto border bg-gray-100">
+      <div class="relative overflow-x-auto min-w-[500px]">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+            Performance en fonction des Configurations de partie
+          </caption>
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-6 py-3">#</th>
+              <th scope="col" class="px-6 py-3">Configuration</th>
+              <th scope="col" class="px-6 py-3">Score cumulee</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rankings %}
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ forloop.counter }}</th>
+                <td class="px-6 py-4">G{{ row.config.grid_size }}A{{ row.config.alignment }}</td>
+                <td class="px-6 py-4">{{row.score}}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div class="grid"></div>
-</div>
-{% endblock  %}
+  </div>
+{% endblock %}

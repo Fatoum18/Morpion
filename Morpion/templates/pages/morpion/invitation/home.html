@@ -1,0 +1,30 @@
+{% extends 'base-page.html' %}
+
+{% block title %}
+  <title>HELBMorpion | Invitations</title>
+{% endblock %}
+{% block pageContainer %}
+  <div class="flex flex-col h-full w-full gap-10 mt-4 p-5 shadow-sm">
+    <div class="bg-gray-100 rounded-xl mx-auto border p-10 shadow-sm min-w-[600px]">
+      <div class="inline-flex items-center justify-between w-full">
+        <h3 class="font-bold text-xl sm:text-2xl text-gray-800 ">Invitations</h3>
+      </div>
+      <p class="mt-8 font-medium text-gray-500 text-sm sm:text-base mb-10 ">
+        <a href="{% url 'create_invitation' %}"><button>Envoyer une invitation</button></a>
+      </p>
+
+      {% for invitation in invitations %}
+        <div class="mt-2 px-6 py-4 bg-white rounded-lg shadow w-full max-w-[500px]">
+          <div class="inline-flex items-center justify-between w-full">
+            <div class="inline-flex items-center">
+              <img src="https://cdn-icons-png.flaticon.com/512/893/893257.png" alt="Training Icon" class="w-6 h-6 mr-3" />
+              <h3 class="font-bold text-base text-gray-800">{{ invitation.recipient.name }} |  {{invitation.game.title}}</h3>
+            </div>
+            <p class="text-xs text-gray-500">{{ invitation.created_at }}</p>
+          </div>
+          <p class="mt-1 text-sm">{{ invitation.message }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

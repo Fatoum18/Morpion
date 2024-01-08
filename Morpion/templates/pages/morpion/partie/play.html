@@ -72,7 +72,6 @@
               {% for cell in row %}
                 <td class="w-[94px] h-[94px] bg-slate-500 rounded">
                   <div class="w-full h-full flex items-center justify-center text-4xl" data-row="{{ forloop.parentloop.counter0 }}" data-col="{{ forloop.counter0 }}" onclick="makeMove(this,{{ game.id }})">
-                    {% comment %} {{ cell|default:'' }} {% endcomment %}
                     {{ game|get_symbol_player_id:cell|default:'' }}
                   </div>
                 </td>
@@ -81,7 +80,7 @@
           {% endfor %}
         </table>
         {% if game.status != 'FINISHED' %}
-          <button type="button">Abandoner</button>
+          <a href="{% url 'left_game' game.id %}"><button type="button">Abandoner</button></a>
         {% endif %}
       {% endif %}
     </div>
