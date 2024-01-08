@@ -69,7 +69,7 @@ def make_move(request, game_id="game_id"):
         return JsonResponse(response_data, status=403)
     
     if game.current_player != User(user_id):
-        response_data["message"]= "It's not your turn"
+        response_data["message"]= "C'est pas a votre tour de jouer "
         response_data["is_error"]=True 
  
 
@@ -91,7 +91,7 @@ def make_move(request, game_id="game_id"):
         return JsonResponse({})
     else:
         response_data = {
-            'message': 'Cell already taken. Try again.',
+            'message': 'Cette cellule est deja occuper. Essayez une autre.',
             "is_error": True
         }
 
