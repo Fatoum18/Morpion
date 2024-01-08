@@ -38,17 +38,8 @@ def generate_winning_combinations(size,alignment):
 def has_winner(game):
     
     winning_combinations = generate_winning_combinations(game.config.grid_size,game.config.alignment)
-    print(winning_combinations)
+ 
     for combination in winning_combinations:
-    #     for row, col in combination:
-    #         print(f"row= {row}, col= {col}")
-    #         if game.board[row][col]==game.current_player.id:
-    #             print(f"row= {row}, col= {col} contains player id = {game.current_player.id}")
-    #         else:
-    #             print(f"row= {row}, col= {col} not contains player id = {game.current_player.id}")
-    #             print(game.board[row][col])
-    
-    # return False
         if all(game.board[row][col]==game.current_player.id for row,col in combination):
             return True
     return False
